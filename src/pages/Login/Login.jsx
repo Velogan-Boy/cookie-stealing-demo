@@ -13,7 +13,6 @@ function Login() {
    const [isSignup, setIsSignup] = useState(false);
    const { handleRegister, handleLogin, isAuthenticated, setLoader } = useContext(AuthContext);
    const navigate = useNavigate();
-   const captchaRef = useRef(null);
 
    const [formData, setFormData] = useState({
       email: '',
@@ -30,28 +29,20 @@ function Login() {
    };
 
    const clickedRegister = () => {
-      const token = captchaRef.current.getValue();
-
       handleRegister({
          email: formData.email,
          password: formData.password,
          confirmPassword: formData.confirmPassword,
-         recaptchaToken: token,
       });
 
-      captchaRef.current.reset();
    };
 
    const clickedLogin = () => {
-      const token = captchaRef.current.getValue();
-
       handleLogin({
          email: formData.email,
          password: formData.password,
-         recaptchaToken: token,
       });
 
-      captchaRef.current.reset();
    };
 
    useEffect(() => {

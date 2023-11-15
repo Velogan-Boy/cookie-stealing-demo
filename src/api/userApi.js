@@ -24,7 +24,7 @@ export const getUser = async () => {
 export const registerUser = async ({ email, password }) => {
    try {
       let {
-         data: { message, token },
+         data: { message, token , user},
       } = await api.post(`${route}/register`, {
          email: email,
          password: password,
@@ -32,7 +32,7 @@ export const registerUser = async ({ email, password }) => {
 
       Cookies.set('token', token);
 
-      return { result: true, msg: message, token };
+      return { result: true, msg: message, token, user };
    } catch (err) {
       console.log(err);
       return { result: false, msg: err.response.data.message };

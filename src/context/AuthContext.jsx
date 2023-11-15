@@ -11,7 +11,7 @@ export const AuthContext = React.createContext();
 export const AuthProvider = ({ children }) => {
    const [loader, setLoader] = useState(false);
    const [isAuthenticated, setIsAuthenticated] = useState(false);
-   const navigate = useNavigate();
+   const [user, setUser] = useState(null);
 
    const handleRegister = async ({ email, password, confirmPassword }) => {
       setLoader(true);
@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }) => {
 
       if (result) {
          toast.success(msg);
+         welcome();
       } else {
          toast.error(msg);
       }
@@ -58,6 +59,7 @@ export const AuthProvider = ({ children }) => {
 
       if (result) {
          toast.success(msg);
+         welcome();
       } else {
          toast.error(msg);
       }
@@ -66,23 +68,28 @@ export const AuthProvider = ({ children }) => {
    };
 
    const handleLogout = async () => {
-      setLoader(true);
       Cookies.remove('token');
       toast.success('Logged out successfully');
+      setUser(null);
       setIsAuthenticated(false);
    };
 
-   useEffect(() => {
+   const welcome = () => {
       const token = Cookies.get('token');
 
       if (token) {
          getUser().then((res) => {
             if (res.result) {
                setIsAuthenticated(true);
+               setUser(res.user);
                console.log('User is authenticated');
             }
          });
       }
+   };
+
+   useEffect(() => {
+      welcome();
    }, []);
 
    return (
@@ -94,6 +101,8 @@ export const AuthProvider = ({ children }) => {
             handleLogout,
             loader,
             setLoader,
+            user,
+            setUser,
          }}
       >
          {children}
